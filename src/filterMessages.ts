@@ -12,7 +12,7 @@ interface FormattedMessage {
   text: string;
 }
 
-const keyword = "samsung_OR_iphone_AND_apple";
+const keyword = "samsung_AND_-tv_OR_iphone_AND_apple";
 
 export async function filterMessages(
   relationalRepository: RelationalRepository,
@@ -29,7 +29,12 @@ export async function filterMessages(
     for (const keywordGroup of keyword.split("_OR_")) {
       const containsAllKeywords = keywordGroup
         .split("_AND_")
-        .every((keyword) => text.includes(keyword));
+        .every((keyword) => {
+          if (keyword.startsWith("-")) {
+            return !text.includes(keyword.substring(1));
+          }
+          return text.includes(keyword);
+        });
 
       if (!containsAllKeywords) continue;
 

@@ -83,11 +83,7 @@ export class RelationalRepository {
     }
 
     return this.databaseConnection
-      .prepare(
-        `
-            SELECT * FROM groups
-        `,
-      )
+      .prepare(`SELECT * FROM groups`)
       .all() as Group[];
   }
 
@@ -119,5 +115,15 @@ export class RelationalRepository {
         message.date,
         message.text,
       );
+  }
+
+  listMessages(): Message[] {
+    if (!this.databaseConnection) {
+      throw new Error("Database connection is not initialized.");
+    }
+
+    return this.databaseConnection
+      .prepare(`SELECT * FROM messages`)
+      .all() as Message[];
   }
 }

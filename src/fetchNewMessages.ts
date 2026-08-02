@@ -1,6 +1,7 @@
 import { TelegramClient } from "telegram";
 import { RelationalRepository } from "./repository/RelationalRepository";
 import { Group } from "./repository/entities";
+import { parseDate } from "./utils/parseDate";
 
 export async function fetchNewMessages(
   client: TelegramClient,
@@ -12,7 +13,7 @@ export async function fetchNewMessages(
   for await (const message of client.iterMessages(group.user_name, {
     minId: group.last_message_id,
   })) {
-    const date = new Date(Number(`${message.date}000`));
+    const date = parseDate(message.date);
 
     relationalRepository.insertMessage({
       telegram_message_id: message.id,

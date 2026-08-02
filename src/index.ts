@@ -45,7 +45,7 @@ async function main() {
       await listGroups(client, relationalRepository);
       break;
     case "filter-messages":
-      await filterMessages(client);
+      await filterMessages(relationalRepository);
       break;
     case "fetch-messages":
       await fetchMessages(client, relationalRepository);

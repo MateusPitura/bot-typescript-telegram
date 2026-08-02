@@ -1,6 +1,7 @@
 import { TelegramClient } from "telegram";
 import { RelationalRepository } from "./repository/RelationalRepository";
 import { Group } from "./repository/entities";
+import { parseDate } from "./utils/parseDate";
 
 const stopDate = new Date("2026-07-29T00:00:00Z");
 
@@ -12,7 +13,7 @@ export async function fetchMessagesHistory(
   let maxId = group.last_message_id;
 
   for await (const message of client.iterMessages(group.user_name)) {
-    const date = new Date(Number(`${message.date}000`));
+    const date = parseDate(message.date);
 
     if (date < stopDate) {
       break;

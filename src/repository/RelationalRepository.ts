@@ -46,12 +46,12 @@ export class RelationalRepository {
     this.databaseConnection
       .prepare(
         `
-            INSERT INTO groups(
-                user_name,
-                title,
-                updated_at
-            )
-            VALUES (?, ?, ?)
+          INSERT OR IGNORE INTO groups (
+            user_name,
+            title,
+            updated_at
+          )
+          VALUES (?, ?, ?)
         `,
       )
       .run(group.user_name, group.title, new Date().toISOString());

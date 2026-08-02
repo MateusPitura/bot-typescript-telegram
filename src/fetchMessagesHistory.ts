@@ -3,7 +3,7 @@ import { RelationalRepository } from "./repository/RelationalRepository";
 import { Group } from "./repository/entities";
 import { parseDate } from "./utils/parseDate";
 
-const stopDate = new Date("2026-07-29T00:00:00Z");
+const stopDate = new Date("2025-08-02T00:00:00Z");
 
 export async function fetchMessagesHistory(
   client: TelegramClient,

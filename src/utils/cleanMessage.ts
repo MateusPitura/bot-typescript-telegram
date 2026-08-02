@@ -8,6 +8,7 @@ const unwantedTexts = [
   ["📣 Anúncio | Comprando no link você ajuda o canal!", " "],
   ["Compre aqui: ", " "],
   ["OFERTA RELÂMPAGO:", " "],
+  ["📱 GARIMPOS DO DE PINHO 📱\nhttps://t.me/garimposdodepinho", " "],
   ["–", "-"],
   ["⚫️", " "],
   ["🛒", " "],

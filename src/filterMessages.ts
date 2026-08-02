@@ -15,7 +15,7 @@ interface FormattedMessage {
 
 const DATE_REGEX = /\d{4}-\d{2}-\d{2}/;
 
-const keyword = "cupom_AND_amazon_AND_2026-07-01_OR_cupom_AND_livre_AND_2026-07-01";
+const KEYWORD = process.env.KEYWORD || "";
 
 export async function filterMessages(
   relationalRepository: RelationalRepository,
@@ -29,7 +29,7 @@ export async function filterMessages(
   for (const message of messages) {
     const text = message.text?.toLowerCase() || "";
 
-    for (const keywordGroup of keyword.split("_OR_")) {
+    for (const keywordGroup of KEYWORD.split("_OR_")) {
       let dateFilter = null;
 
       const containsAllKeywords = keywordGroup

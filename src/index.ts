@@ -1,16 +1,15 @@
 import "dotenv/config";
+import fs from "node:fs";
 import { TelegramClient } from "telegram";
 import { StringSession } from "telegram/sessions";
-import fs from "node:fs";
-import { ask } from "./ask";
+import { ask } from "./utils/ask";
+import { filterMessages } from "./filterMessages";
+import { listGroups } from "./listGroups";
 
 const apiId = Number(process.env.API_ID);
 const apiHash = process.env.API_HASH!;
 const phoneNumber = process.env.CELL_PHONE!;
 const SESSION_FILE = "session.txt";
-
-const group = "escolhasegura";
-const keywords = ["samsung"];
 
 const sessionString = fs.existsSync(SESSION_FILE)
   ? fs.readFileSync(SESSION_FILE, "utf8")
@@ -36,24 +35,15 @@ async function main() {
     console.log("Session saved.");
   }
 
-  const messages = await client.getMessages(group, {
-    limit: 100,
-  });
-
-  console.log(`Loaded ${messages.length} messages\n`);
-
-  for (const msg of messages.reverse()) {
-    if (!msg.message) continue;
-
-    const text = msg.message.toLowerCase();
-
-    const match = keywords.some((keyword) => text.includes(keyword));
-
-    if (!match) continue;
-
-    console.log("--------------------------------");
-    console.log(msg.date);
-    console.log(msg.message);
+  switch (process.argv[2]) {
+    case "list-groups":
+      await listGroups(client);
+      break;
+    case "filter-messages":
+      await filterMessages(client);
+      break;
+    default:
+      console.log("Invalid command. Use 'list-groups' or 'filter-messages'.");
   }
 
   void client.disconnect();

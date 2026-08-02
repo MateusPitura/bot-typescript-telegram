@@ -10,6 +10,6 @@ export interface Message {
   id: number;
   telegram_message_id: number;
   group_user_name: string;
-  date: string;
+  timestamp: number;
   text: string | null;
 }

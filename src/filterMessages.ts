@@ -1,7 +1,7 @@
 import { format } from "date-fns";
-import { RelationalRepository } from "./repository/RelationalRepository";
 import { writeFileSync } from "node:fs";
-import { formatMessage } from "./utils/formatMessage";
+import { RelationalRepository } from "./repository/RelationalRepository";
+import { cleanMessage } from "./utils/cleanMessage";
 
 interface FilteredMessage {
   timestamp: number;
@@ -13,7 +13,9 @@ interface FormattedMessage {
   text: string;
 }
 
-const keyword = "samsung_AND_-tv_OR_iphone_AND_apple";
+const DATE_REGEX = /\d{4}-\d{2}-\d{2}/;
+
+const keyword = "cupom_AND_amazon_AND_2026-07-01_OR_cupom_AND_livre_AND_2026-07-01";
 
 export async function filterMessages(
   relationalRepository: RelationalRepository,
@@ -28,9 +30,16 @@ export async function filterMessages(
     const text = message.text?.toLowerCase() || "";
 
     for (const keywordGroup of keyword.split("_OR_")) {
+      let dateFilter = null;
+
       const containsAllKeywords = keywordGroup
         .split("_AND_")
         .every((keyword) => {
+          if (DATE_REGEX.test(keyword)) {
+            dateFilter = new Date(keyword).getTime();
+            return true;
+          }
+
           if (keyword.startsWith("-")) {
             return !text.includes(keyword.substring(1));
           }
@@ -38,12 +47,12 @@ export async function filterMessages(
         });
 
       if (!containsAllKeywords) continue;
+      if (dateFilter && message.timestamp < dateFilter) continue;
 
-      const date = new Date(message.date);
       const keywordGroupFilteredMessages =
         keywordGroupFilteredMessagesMap.get(keywordGroup);
       const filteredMessage = {
-        timestamp: date.getTime(),
+        timestamp: message.timestamp,
         text: message.text ?? "",
       };
 
@@ -66,14 +75,14 @@ export async function filterMessages(
     filteredMessages,
   ] of keywordGroupFilteredMessagesMap) {
     const sortedMessages = filteredMessages.sort(
-      (a, b) => a.timestamp - b.timestamp,
+      (a, b) => b.timestamp - a.timestamp,
     );
 
     const formattedMessages: FormattedMessage[] = [];
     for (const message of sortedMessages) {
       formattedMessages.push({
         date: format(new Date(message.timestamp), "dd/MM/yyyy HH:mm"),
-        text: formatMessage(message.text),
+        text: cleanMessage(message.text),
       });
     }
 

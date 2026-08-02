@@ -18,7 +18,7 @@ export async function fetchNewMessages(
     relationalRepository.insertMessage({
       telegram_message_id: message.id,
       group_user_name: group.user_name,
-      date: date.toISOString(),
+      timestamp: date.getTime(),
       text: message.message,
     });
 

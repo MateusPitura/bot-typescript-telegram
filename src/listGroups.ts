@@ -16,7 +16,7 @@ export async function listGroups(
     if (!groupUserName || ignoreGroups.includes(groupUserName)) continue;
 
     relationalRepository.createGroup({
-      username: groupUserName,
+      user_name: groupUserName,
       title: dialog.title!,
     });
   }

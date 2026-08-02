@@ -5,7 +5,9 @@ const unwantedTexts = [
   ],
   ["⚠️ Oferta por tempo limitado!", " "],
   ["📣 Anúncio\n\n🛒 FELPS RECOMENDA\nhttps://felpsrecomenda.com.br", " "],
+  ["📣 Anúncio | Comprando no link você ajuda o canal!", " "],
   ["Compre aqui: ", " "],
+  ["OFERTA RELÂMPAGO:", " "],
   ["–", "-"],
   ["⚫️", " "],
   ["🛒", " "],
@@ -14,10 +16,12 @@ const unwantedTexts = [
   ["🔥", " "],
   ["💳", " "],
   ["➡️", " "],
+  ["⤵️", " "],
+  ["👉", " "],
   ["\n", " "],
 ];
 
-export function formatMessage(originalMessage: string): string {
+export function cleanMessage(originalMessage: string): string {
   let formattedMessage = originalMessage;
   for (const unwantedText of unwantedTexts) {
     formattedMessage = formattedMessage.replace(

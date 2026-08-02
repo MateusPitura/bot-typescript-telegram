@@ -30,7 +30,7 @@ export class RelationalRepository {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             telegram_message_id INTEGER NOT NULL,
             group_user_name TEXT NOT NULL,
-            date TEXT NOT NULL,
+            timestamp INTEGER NOT NULL,
             text TEXT,
             UNIQUE(group_user_name, telegram_message_id),
             FOREIGN KEY(group_user_name) REFERENCES groups(user_name)
@@ -90,7 +90,7 @@ export class RelationalRepository {
   insertMessage(
     message: Pick<
       Message,
-      "telegram_message_id" | "group_user_name" | "date" | "text"
+      "telegram_message_id" | "group_user_name" | "timestamp" | "text"
     >,
   ) {
     if (!this.databaseConnection) {
@@ -103,7 +103,7 @@ export class RelationalRepository {
             INSERT OR IGNORE INTO messages(
                 telegram_message_id,
                 group_user_name,
-                date,
+                timestamp,
                 text
             )
             VALUES (?, ?, ?, ?)
@@ -112,7 +112,7 @@ export class RelationalRepository {
       .run(
         message.telegram_message_id,
         message.group_user_name,
-        message.date,
+        message.timestamp,
         message.text,
       );
   }

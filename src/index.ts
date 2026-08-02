@@ -2,9 +2,11 @@ import "dotenv/config";
 import fs from "node:fs";
 import { TelegramClient } from "telegram";
 import { StringSession } from "telegram/sessions";
-import { ask } from "./utils/ask";
+import { fetchMessages } from "./fetchMessages";
 import { filterMessages } from "./filterMessages";
 import { listGroups } from "./listGroups";
+import { RelationalRepository } from "./repository/RelationalRepository";
+import { ask } from "./utils/ask";
 
 const apiId = Number(process.env.API_ID);
 const apiHash = process.env.API_HASH!;
@@ -35,15 +37,21 @@ async function main() {
     console.log("Session saved.");
   }
 
+  const relationalRepository = new RelationalRepository().init();
+  relationalRepository.migrate();
+
   switch (process.argv[2]) {
     case "list-groups":
-      await listGroups(client);
+      await listGroups(client, relationalRepository);
       break;
     case "filter-messages":
       await filterMessages(client);
       break;
+    case "fetch-messages":
+      await fetchMessages(client, relationalRepository);
+      break;
     default:
-      console.log("Invalid command. Use 'list-groups' or 'filter-messages'.");
+      console.log("Invalid command");
   }
 
   void client.disconnect();

@@ -4,7 +4,7 @@ import { TelegramClient } from "telegram";
 import { StringSession } from "telegram/sessions";
 import { fetchMessages } from "./fetchMessages";
 import { filterMessages } from "./filterMessages";
-import { listGroups } from "./listGroups";
+import { updateGroupList } from "./updateGroupList";
 import { RelationalRepository } from "./repository/RelationalRepository";
 import { ask } from "./utils/ask";
 
@@ -41,8 +41,8 @@ async function main() {
   relationalRepository.migrate();
 
   switch (process.argv[2]) {
-    case "list-groups":
-      await listGroups(client, relationalRepository);
+    case "updateGroupList":
+      await updateGroupList(client, relationalRepository);
       break;
     case "filter-messages":
       await filterMessages(relationalRepository);

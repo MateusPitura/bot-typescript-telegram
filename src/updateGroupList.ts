@@ -4,7 +4,7 @@ import { RelationalRepository } from "./repository/RelationalRepository";
 type EntityProps = Record<"username", string>;
 const ignoreGroups = process.env.IGNORE_GROUPS?.split(",") || [];
 
-export async function listGroups(
+export async function updateGroupList(
   client: TelegramClient,
   relationalRepository: RelationalRepository,
 ) {

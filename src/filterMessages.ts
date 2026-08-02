@@ -1,6 +1,7 @@
 import { format } from "date-fns";
 import { RelationalRepository } from "./repository/RelationalRepository";
 import { writeFileSync } from "node:fs";
+import { formatMessage } from "./utils/formatMessage";
 
 interface FilteredMessage {
   timestamp: number;
@@ -72,7 +73,7 @@ export async function filterMessages(
     for (const message of sortedMessages) {
       formattedMessages.push({
         date: format(new Date(message.timestamp), "dd/MM/yyyy HH:mm"),
-        text: message.text,
+        text: formatMessage(message.text),
       });
     }
 

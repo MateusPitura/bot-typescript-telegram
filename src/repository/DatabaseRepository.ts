@@ -1,23 +1,16 @@
 import Database from "better-sqlite3";
 import fs from "node:fs";
-import { Group, Message } from "./entities";
+import { DatabaseGroup, DatabaseMessage } from "../types/databaseDtos";
 
-export class RelationalRepository {
-  private databaseConnection: Database.Database | null = null;
+export class DatabaseRepository {
+  private connection: Database.Database | null = null;
 
-  init() {
-    fs.mkdirSync("data", { recursive: true });
-    this.databaseConnection = new Database("data/database.db");
-    this.databaseConnection.pragma("journal_mode = WAL");
-    return this;
-  }
-
-  migrate() {
-    if (!this.databaseConnection) {
+  private migrate() {
+    if (!this.connection) {
       throw new Error("Database connection is not initialized.");
     }
 
-    this.databaseConnection.exec(`
+    this.connection.exec(`
         CREATE TABLE IF NOT EXISTS groups (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_name TEXT NOT NULL UNIQUE,
@@ -38,12 +31,20 @@ export class RelationalRepository {
     `);
   }
 
-  createGroup(group: Pick<Group, "user_name" | "title">) {
-    if (!this.databaseConnection) {
+  init() {
+    fs.mkdirSync("data", { recursive: true });
+    this.connection = new Database("data/database.db");
+    this.connection.pragma("journal_mode = WAL");
+    this.migrate();
+    return this;
+  }
+
+  createGroup(group: Pick<DatabaseGroup, "user_name" | "title">) {
+    if (!this.connection) {
       throw new Error("Database connection is not initialized.");
     }
 
-    this.databaseConnection
+    this.connection
       .prepare(
         `
           INSERT OR IGNORE INTO groups (
@@ -58,13 +59,13 @@ export class RelationalRepository {
   }
 
   updateGroupLastMessageId(
-    group: Pick<Group, "user_name" | "last_message_id">,
+    group: Pick<DatabaseGroup, "user_name" | "last_message_id">,
   ) {
-    if (!this.databaseConnection) {
+    if (!this.connection) {
       throw new Error("Database connection is not initialized.");
     }
 
-    this.databaseConnection
+    this.connection
       .prepare(
         `
             UPDATE groups
@@ -77,27 +78,27 @@ export class RelationalRepository {
       .run(group.last_message_id, new Date().toISOString(), group.user_name);
   }
 
-  listGroups(): Group[] {
-    if (!this.databaseConnection) {
+  listGroups(): DatabaseGroup[] {
+    if (!this.connection) {
       throw new Error("Database connection is not initialized.");
     }
 
-    return this.databaseConnection
+    return this.connection
       .prepare(`SELECT * FROM groups`)
-      .all() as Group[];
+      .all() as DatabaseGroup[];
   }
 
   insertMessage(
     message: Pick<
-      Message,
+      DatabaseMessage,
       "telegram_message_id" | "group_user_name" | "timestamp" | "text"
     >,
   ) {
-    if (!this.databaseConnection) {
+    if (!this.connection) {
       throw new Error("Database connection is not initialized.");
     }
 
-    this.databaseConnection
+    this.connection
       .prepare(
         `
             INSERT OR IGNORE INTO messages(
@@ -117,13 +118,13 @@ export class RelationalRepository {
       );
   }
 
-  listMessages(): Message[] {
-    if (!this.databaseConnection) {
+  listMessages(): DatabaseMessage[] {
+    if (!this.connection) {
       throw new Error("Database connection is not initialized.");
     }
 
-    return this.databaseConnection
+    return this.connection
       .prepare(`SELECT * FROM messages`)
-      .all() as Message[];
+      .all() as DatabaseMessage[];
   }
 }

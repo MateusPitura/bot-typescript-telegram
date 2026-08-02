@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 import { writeFileSync } from "node:fs";
-import { RelationalRepository } from "./repository/RelationalRepository";
+import { DatabaseRepository } from "./repository/DatabaseRepository";
 import { cleanMessage } from "./utils/cleanMessage";
 
 interface FilteredMessage {
@@ -17,10 +17,8 @@ const DATE_REGEX = /\d{4}-\d{2}-\d{2}/;
 
 const KEYWORD = process.env.KEYWORD || "";
 
-export async function filterMessages(
-  relationalRepository: RelationalRepository,
-) {
-  const messages = relationalRepository.listMessages();
+export async function filterMessages(databaseRepository: DatabaseRepository) {
+  const messages = databaseRepository.listMessages();
 
   console.log(`Loaded ${messages.length} messages\n`);
 

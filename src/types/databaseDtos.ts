@@ -1,4 +1,4 @@
-export interface Group {
+export interface DatabaseGroup {
   id: number;
   user_name: string;
   title: string;
@@ -6,7 +6,7 @@ export interface Group {
   updated_at: string;
 }
 
-export interface Message {
+export interface DatabaseMessage {
   id: number;
   telegram_message_id: number;
   group_user_name: string;

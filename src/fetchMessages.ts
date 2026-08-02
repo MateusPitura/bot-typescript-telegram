@@ -1,13 +1,11 @@
-import { TelegramClient } from "telegram";
 import { fetchMessagesHistory } from "./fetchMessagesHistory";
 import { fetchNewMessages } from "./fetchNewMessages";
-import { RelationalRepository } from "./repository/RelationalRepository";
+import { DatabaseRepository } from "./repository/DatabaseRepository";
+import { TelegramRepository } from "./repository/TelegramRepository";
 
-export async function fetchMessages(
-  client: TelegramClient,
-  relationalRepository: RelationalRepository,
-) {
-  const groups = relationalRepository.listGroups();
+export async function fetchMessages(databaseRepository: DatabaseRepository) {
+  const groups = databaseRepository.listGroups();
+  const telegramRepository = await new TelegramRepository().init();
 
   for await (const group of groups) {
     let maxId = 0;
@@ -15,18 +13,28 @@ export async function fetchMessages(
     if (group.last_message_id > 0) {
       console.log(`Fetching new messages: ${group.title}`);
 
-      maxId = await fetchNewMessages(client, relationalRepository, group);
+      maxId = await fetchNewMessages(
+        telegramRepository,
+        databaseRepository,
+        group,
+      );
     } else {
       console.log(`Fetching messages history: ${group.title}`);
 
-      maxId = await fetchMessagesHistory(client, relationalRepository, group);
+      maxId = await fetchMessagesHistory(
+        telegramRepository,
+        databaseRepository,
+        group,
+      );
     }
 
     if (maxId > group.last_message_id) {
-      relationalRepository.updateGroupLastMessageId({
+      databaseRepository.updateGroupLastMessageId({
         user_name: group.user_name,
         last_message_id: maxId,
       });
     }
   }
+
+  telegramRepository.disconnect();
 }

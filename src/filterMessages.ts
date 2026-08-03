@@ -18,7 +18,7 @@ const DATE_REGEX = /\d{4}-\d{2}-\d{2}/;
 const KEYWORD = process.env.KEYWORD || "";
 
 export async function filterMessages(databaseRepository: DatabaseRepository) {
-  const messages = databaseRepository.listMessages();
+  const messages = databaseRepository.listMessagesByGroup();
 
   console.log(`Loaded ${messages.length} messages\n`);
 

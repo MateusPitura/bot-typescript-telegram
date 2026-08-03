@@ -8,5 +8,5 @@
     "outDir": "dist",
     "skipLibCheck": true
   },
-  "include": ["src", "shared/*"]
+  "include": ["src", "worker/src/*"]
 }

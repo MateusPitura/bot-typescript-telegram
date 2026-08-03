@@ -9,7 +9,13 @@ declare namespace Cloudflare {
 	}
 	interface Env extends __BaseEnv_Env {}
 }
-interface Env extends __BaseEnv_Env {}
+interface Env extends __BaseEnv_Env {
+    TELEGRAM_API_ID: string
+    TELEGRAM_API_HASH: string
+    TELEGRAM_STRING_SESSION: string
+    IGNORE_GROUPS: string
+    KV: KVNamespace;
+}
 
 // Begin runtime types
 /*! *****************************************************************************

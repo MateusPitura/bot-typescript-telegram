@@ -3,9 +3,11 @@ import { fetchNewMessages } from "./fetchNewMessages";
 import { DatabaseRepository } from "./repository/DatabaseRepository";
 import { TelegramRepository } from "./repository/TelegramRepository";
 
-export async function fetchMessages(databaseRepository: DatabaseRepository) {
+export async function fetchMessages(
+  databaseRepository: DatabaseRepository,
+  telegramRepository: TelegramRepository,
+) {
   const groups = databaseRepository.listGroups();
-  const telegramRepository = await new TelegramRepository().init();
 
   for await (const group of groups) {
     let maxId = 0;
@@ -35,6 +37,4 @@ export async function fetchMessages(databaseRepository: DatabaseRepository) {
       });
     }
   }
-
-  telegramRepository.disconnect();
 }

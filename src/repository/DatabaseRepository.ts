@@ -1,8 +1,9 @@
 import Database from "better-sqlite3";
 import fs from "node:fs";
-import { DatabaseGroup, DatabaseMessage } from "../types/databaseDtos";
+import { DatabaseInterface } from "../../worker/src/repository/DatabaseInterface";
+import { DatabaseGroup, DatabaseMessage } from "../../worker/src/types/databaseDtos";
 
-export class DatabaseRepository {
+export class DatabaseRepository implements DatabaseInterface {
   private connection: Database.Database | null = null;
 
   private migrate() {
@@ -39,7 +40,7 @@ export class DatabaseRepository {
     return this;
   }
 
-  createGroup(group: Pick<DatabaseGroup, "user_name" | "title">) {
+  createGroup(group: Pick<DatabaseGroup, "user_name" | "title">): void {
     if (!this.connection) {
       throw new Error("Database connection is not initialized.");
     }
@@ -60,7 +61,7 @@ export class DatabaseRepository {
 
   updateGroupLastMessageId(
     group: Pick<DatabaseGroup, "user_name" | "last_message_id">,
-  ) {
+  ): void {
     if (!this.connection) {
       throw new Error("Database connection is not initialized.");
     }
@@ -93,7 +94,7 @@ export class DatabaseRepository {
       DatabaseMessage,
       "telegram_message_id" | "group_user_name" | "timestamp" | "text"
     >,
-  ) {
+  ): void {
     if (!this.connection) {
       throw new Error("Database connection is not initialized.");
     }
@@ -118,7 +119,7 @@ export class DatabaseRepository {
       );
   }
 
-  listMessages(): DatabaseMessage[] {
+  listMessagesByGroup(): DatabaseMessage[] {
     if (!this.connection) {
       throw new Error("Database connection is not initialized.");
     }

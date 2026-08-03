@@ -1,6 +1,6 @@
+import { DatabaseGroup } from "../worker/src/types/databaseDtos";
 import { DatabaseRepository } from "./repository/DatabaseRepository";
 import { TelegramRepository } from "./repository/TelegramRepository";
-import { DatabaseGroup } from "./types/databaseDtos";
 import { parseDate } from "./utils/parseDate";
 
 const stopDate = new Date("2025-08-02T00:00:00Z");

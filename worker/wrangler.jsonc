@@ -7,5 +7,13 @@
 		"enabled": true,
 	},
 	"upload_source_maps": true,
-	"compatibility_flags": ["nodejs_compat"],
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"kv_namespaces": [
+		{
+			"binding": "KV",
+			"id": "41754750c5a6492ba2865b88c76dd233"
+		}
+	],
 }

@@ -40,7 +40,7 @@ Filter messages: `npm run dev "filterMessages"`, the filter is based on the `KEY
 
 Deploy new version: `worker/npm run deploy`
 
-Update group list: open the following endpoint in a browser: https://telegram-bot-promo.mateuspitura.workers.dev/updateGroupList. It should return "OK". After adding the group, update the Cloudflare Workers KV JSON in the Cloudflare dashboard, setting `last_message_id` to the last message ID of the group. This prevents the worker from fetching the entire message history on its first run
+Update group list: open the following endpoint in a browser: [telegram-bot-promo.mateuspitura.workers.dev/updateGroupList](https://url.mateuspitura.com?q=telegram-bot-promo.mateuspitura.workers.dev/updateGroupList). It should return "OK". After adding the group, update the Cloudflare Workers KV JSON in the Cloudflare dashboard, setting `last_message_id` to the last message ID of the group. This prevents the worker from fetching the entire message history on its first run
 
 Download and filter messages: this is automatically done as configured in `wrangler.jsonc` with the `triggers` property
 
@@ -55,7 +55,7 @@ Download and filter messages: this is automatically done as configured in `wrang
 
 ### Environment Variables
 
-`TELEGRAM_API_ID` and `TELEGRAM_API_HASH`: get these credentials from [my.telegram.org](https://my.telegram.org)
+`TELEGRAM_API_ID` and `TELEGRAM_API_HASH`: get these credentials from [my.telegram.org](https://url.mateuspitura.com?q=my.telegram.org)
 
 `TELEGRAM_STRING_SESSION`: the first time you run the project locally, leave this variable empty. The Telegram session string will be printed in the console. Save it so it can be reused on subsequent runs
 

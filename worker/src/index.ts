@@ -41,9 +41,17 @@ export default {
     );
     if (!keyword) return;
     const filteredMessages = await filterMessages(databaseRepository, keyword);
-    await telegramRepository.sendMessage(
-      Number(process.env.PRIVATE_GROUP_ID),
-      formatMessagesToSend(filteredMessages),
-    );
+    const formattedMessages = formatMessagesToSend(filteredMessages);
+    if (formattedMessages.length) {
+      await telegramRepository.sendMessage(
+        Number(process.env.PRIVATE_GROUP_ID),
+        formattedMessages,
+      );
+    } else {
+      await telegramRepository.sendMessage(
+        Number(process.env.PRIVATE_GROUP_ID),
+        ['Nothing found for keyword: "' + keyword + '"'],
+      );
+    }
   },
 } satisfies ExportedHandler<Env>;

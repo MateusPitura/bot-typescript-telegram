@@ -19,4 +19,15 @@ The filter will be applied based on `KEYWORD` of `.env`. Accepted syntax:
 
 The filtered messages will be saved in `search/<date>/<keyword>.json`
 
-🌠 WRITE HOW TO GET EACH ENV
+# Environment variables
+
+`TELEGRAM_API_ID`, `TELEGRAM_API_HASH`: get them from [my.telegram.org](https://my.telegram.org)
+
+`TELEGRAM_STRING_SESSION`: run the first time without it locally, the value will be printed in the console, copy it to `.env` for next runs
+
+`PRIVATE_GROUP_ID`: a group that will receive the filtered messages
+
+# Add a new group
+
+Locally: run `npm run dev "updateGroupList"`
+Remotely: access `https://telegram-bot-promo.mateuspitura.workers.dev/updateGroupList` in browser, should return "OK". Also update in Cloudflare panel the Workers KV JSON, set `last_message_id` to the last message id of the group, this avoid fetch all history in first run

@@ -15,11 +15,15 @@ export class DatabaseRepository implements DatabaseInterface {
     return this;
   }
 
-  createGroup(
+  async createGroup(
     group: Pick<DatabaseGroup, "user_name" | "title">,
   ): Promise<void> {
     if (!this.kv) {
       throw new Error("Database connection is not initialized.");
+    }
+    const existingGroup = await this.kv.get(`group:${group.user_name}`);
+    if (existingGroup) {
+      return;
     }
     const key = `group:${group.user_name}`;
     const value = JSON.stringify({
@@ -36,14 +40,13 @@ export class DatabaseRepository implements DatabaseInterface {
       throw new Error("Database connection is not initialized.");
     }
     const key = `group:${group.user_name}`;
-    return this.kv.get(key).then((value) => {
-      if (!value) {
-        throw new Error(`Group with user_name ${group.user_name} not found.`);
-      }
-      const groupData = JSON.parse(value);
-      groupData.last_message_id = group.last_message_id;
-      return this.kv!.put(key, JSON.stringify(groupData));
-    });
+    const value = await this.kv.get(key);
+    if (!value) {
+      throw new Error(`Group with user_name ${group.user_name} not found.`);
+    }
+    const groupData = JSON.parse(value);
+    groupData.last_message_id = group.last_message_id;
+    return this.kv.put(key, JSON.stringify(groupData));
   }
 
   async listGroups(): Promise<DatabaseGroup[]> {

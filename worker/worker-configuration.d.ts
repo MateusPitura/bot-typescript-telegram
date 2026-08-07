@@ -15,6 +15,7 @@ interface Env extends __BaseEnv_Env {
     TELEGRAM_STRING_SESSION: string
     IGNORE_GROUPS: string
     KV: KVNamespace;
+    PRIVATE_GROUP_ID: string;
 }
 
 // Begin runtime types

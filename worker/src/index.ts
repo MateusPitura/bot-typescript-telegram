@@ -3,6 +3,7 @@ import { filterMessages } from "./filterMessages";
 import { DatabaseRepository } from "./repository/DatabaseRepository";
 import { TelegramRepository } from "./repository/TelegramRepository";
 import { updateGroupList } from "./updateGroupList";
+import { formatMessagesToSend } from "./utils/formatMessagesToSend";
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
@@ -35,6 +36,10 @@ export default {
     const databaseRepository = new DatabaseRepository().init(env.KV);
     const telegramRepository = await new TelegramRepository().init(env);
     await fetchMessages(databaseRepository, telegramRepository);
-    await filterMessages(databaseRepository);
+    const filteredMessages = await filterMessages(databaseRepository);
+    await telegramRepository.sendMessage(
+      Number(process.env.PRIVATE_GROUP_ID),
+      formatMessagesToSend(filteredMessages),
+    );
   },
 } satisfies ExportedHandler<Env>;

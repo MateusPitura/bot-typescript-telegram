@@ -4,6 +4,7 @@ import { filterMessages } from "../worker/src/filterMessages";
 import { updateGroupList } from "../worker/src/updateGroupList";
 import { DatabaseRepository } from "./repository/DatabaseRepository";
 import { TelegramRepository } from "./repository/TelegramRepository";
+import { saveMessages } from "./utils/saveMessages";
 
 async function main() {
   const method = process.argv[2];
@@ -21,7 +22,8 @@ async function main() {
       telegramRepository.disconnect();
       break;
     case "filterMessages":
-      await filterMessages(databaseRepository);
+      const filteredMessages = await filterMessages(databaseRepository);
+      saveMessages(filteredMessages);
       break;
     case "fetchMessages":
       telegramRepository = await new TelegramRepository().init();

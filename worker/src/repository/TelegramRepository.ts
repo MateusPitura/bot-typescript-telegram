@@ -57,4 +57,16 @@ export class TelegramRepository {
 
     await this.connection.disconnect();
   }
+
+  async sendMessage(receiverId: number, messages: string[]) {
+    if (!this.connection) {
+      throw new Error("Telegram connection is not initialized.");
+    }
+
+    for (const message of messages) {
+      await this.connection.sendMessage(receiverId, {
+        message,
+      });
+    }
+  }
 }

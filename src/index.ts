@@ -22,7 +22,10 @@ async function main() {
       telegramRepository.disconnect();
       break;
     case "filterMessages":
-      const filteredMessages = await filterMessages(databaseRepository);
+      const filteredMessages = await filterMessages(
+        databaseRepository,
+        process.env.KEYWORD || "",
+      );
       saveMessages(filteredMessages);
       break;
     case "fetchMessages":

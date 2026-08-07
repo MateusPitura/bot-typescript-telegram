@@ -36,7 +36,11 @@ export default {
     const databaseRepository = new DatabaseRepository().init(env.KV);
     const telegramRepository = await new TelegramRepository().init(env);
     await fetchMessages(databaseRepository, telegramRepository);
-    const filteredMessages = await filterMessages(databaseRepository);
+    const keyword = await telegramRepository.getGroupDescription(
+      Number(process.env.PRIVATE_GROUP_ID),
+    );
+    if (!keyword) return;
+    const filteredMessages = await filterMessages(databaseRepository, keyword);
     await telegramRepository.sendMessage(
       Number(process.env.PRIVATE_GROUP_ID),
       formatMessagesToSend(filteredMessages),

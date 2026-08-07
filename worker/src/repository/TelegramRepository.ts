@@ -69,4 +69,17 @@ export class TelegramRepository {
       });
     }
   }
+
+  async getGroupDescription(groupId: number): Promise<string | null> {
+    if (!this.connection) {
+      throw new Error("Telegram connection is not initialized.");
+    }
+
+    const group = await this.connection.getEntity(groupId);
+
+    if ("about" in group && typeof group.about === "string") {
+      return group.about;
+    }
+    return null;
+  }
 }

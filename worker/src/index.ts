@@ -37,21 +37,21 @@ export default {
     const telegramRepository = await new TelegramRepository().init(env);
     await fetchMessages(databaseRepository, telegramRepository);
     const keyword = await telegramRepository.getGroupDescription(
-      Number(process.env.PRIVATE_GROUP_ID),
+      Number(env.PRIVATE_GROUP_ID),
     );
+    console.log("keyword: ", keyword);
     if (!keyword) return;
     const filteredMessages = await filterMessages(databaseRepository, keyword);
     const formattedMessages = formatMessagesToSend(filteredMessages);
     if (formattedMessages.length) {
       await telegramRepository.sendMessage(
-        Number(process.env.PRIVATE_GROUP_ID),
+        Number(env.PRIVATE_GROUP_ID),
         formattedMessages,
       );
     } else {
-      await telegramRepository.sendMessage(
-        Number(process.env.PRIVATE_GROUP_ID),
-        ['Nothing found for keyword: "' + keyword + '"'],
-      );
+      await telegramRepository.sendMessage(Number(env.PRIVATE_GROUP_ID), [
+        'Nothing found for keyword: "' + keyword + '"',
+      ]);
     }
   },
 } satisfies ExportedHandler<Env>;

@@ -30,12 +30,11 @@ export async function fetchMessages(
       );
     }
 
-    // 🌠 uncomment
-    // if (maxId > group.last_message_id) {
-    //   databaseRepository.updateGroupLastMessageId({
-    //     user_name: group.user_name,
-    //     last_message_id: maxId,
-    //   });
-    // }
+    if (maxId > group.last_message_id) {
+      databaseRepository.updateGroupLastMessageId({
+        user_name: group.user_name,
+        last_message_id: maxId,
+      });
+    }
   }
 }

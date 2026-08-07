@@ -14,7 +14,5 @@ export interface DatabaseInterface {
       "telegram_message_id" | "group_user_name" | "timestamp" | "text"
     >,
   ): Promise<void> | void;
-  listMessagesByGroup(
-    groupUserName: string,
-  ): Promise<DatabaseMessage[]> | DatabaseMessage[];
+  listMessages(): Promise<DatabaseMessage[]> | DatabaseMessage[];
 }

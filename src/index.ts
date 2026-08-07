@@ -1,7 +1,7 @@
 import "dotenv/config";
+import { fetchMessages } from "../worker/src/fetchMessages";
+import { filterMessages } from "../worker/src/filterMessages";
 import { updateGroupList } from "../worker/src/updateGroupList";
-import { fetchMessages } from "./fetchMessages";
-import { filterMessages } from "./filterMessages";
 import { DatabaseRepository } from "./repository/DatabaseRepository";
 import { TelegramRepository } from "./repository/TelegramRepository";
 

@@ -1,7 +1,10 @@
 import Database from "better-sqlite3";
 import fs from "node:fs";
 import { DatabaseInterface } from "../../worker/src/repository/DatabaseInterface";
-import { DatabaseGroup, DatabaseMessage } from "../../worker/src/types/databaseDtos";
+import {
+  DatabaseGroup,
+  DatabaseMessage,
+} from "../../worker/src/types/databaseDtos";
 
 export class DatabaseRepository implements DatabaseInterface {
   private connection: Database.Database | null = null;
@@ -119,7 +122,7 @@ export class DatabaseRepository implements DatabaseInterface {
       );
   }
 
-  listMessagesByGroup(): DatabaseMessage[] {
+  listMessages(): DatabaseMessage[] {
     if (!this.connection) {
       throw new Error("Database connection is not initialized.");
     }

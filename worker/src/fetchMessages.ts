@@ -1,13 +1,13 @@
-import { fetchMessagesHistory } from "./fetchMessagesHistory";
+import { fetchMessagesHistory } from "../src/fetchMessagesHistory";
+import { TelegramRepository } from "../src/repository/TelegramRepository";
 import { fetchNewMessages } from "./fetchNewMessages";
-import { DatabaseRepository } from "./repository/DatabaseRepository";
-import { TelegramRepository } from "./repository/TelegramRepository";
+import { DatabaseInterface } from "./repository/DatabaseInterface";
 
 export async function fetchMessages(
-  databaseRepository: DatabaseRepository,
+  databaseRepository: DatabaseInterface,
   telegramRepository: TelegramRepository,
 ) {
-  const groups = databaseRepository.listGroups();
+  const groups = await databaseRepository.listGroups();
 
   for await (const group of groups) {
     let maxId = 0;
@@ -30,11 +30,12 @@ export async function fetchMessages(
       );
     }
 
-    if (maxId > group.last_message_id) {
-      databaseRepository.updateGroupLastMessageId({
-        user_name: group.user_name,
-        last_message_id: maxId,
-      });
-    }
+    // 🌠 uncomment
+    // if (maxId > group.last_message_id) {
+    //   databaseRepository.updateGroupLastMessageId({
+    //     user_name: group.user_name,
+    //     last_message_id: maxId,
+    //   });
+    // }
   }
 }

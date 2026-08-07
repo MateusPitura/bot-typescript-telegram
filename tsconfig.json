@@ -8,5 +8,5 @@
     "outDir": "dist",
     "skipLibCheck": true
   },
-  "include": ["src", "worker/src/*"]
+  "include": ["src", "worker/src/*", "worker/src/utils/cleanMessage.ts"]
 }

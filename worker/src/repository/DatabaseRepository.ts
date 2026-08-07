@@ -73,11 +73,7 @@ export class DatabaseRepository implements DatabaseInterface {
     });
   }
 
-  listMessagesByGroup(groupUsername: string): Promise<DatabaseMessage[]> {
-    return Promise.resolve(
-      this.databaseMessages.filter(
-        (message) => message.group_user_name === groupUsername,
-      ),
-    );
+  listMessages(): DatabaseMessage[] {
+    return this.databaseMessages;
   }
 }

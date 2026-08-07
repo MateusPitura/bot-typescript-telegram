@@ -1,3 +1,5 @@
+import { fetchMessages } from "./fetchMessages";
+import { filterMessages } from "./filterMessages";
 import { DatabaseRepository } from "./repository/DatabaseRepository";
 import { TelegramRepository } from "./repository/TelegramRepository";
 import { updateGroupList } from "./updateGroupList";
@@ -27,5 +29,12 @@ export default {
     return new Response("OK", {
       status: 200,
     });
+  },
+
+  async scheduled(_, env) {
+    const databaseRepository = new DatabaseRepository().init(env.KV);
+    const telegramRepository = await new TelegramRepository().init(env);
+    await fetchMessages(databaseRepository, telegramRepository);
+    await filterMessages(databaseRepository);
   },
 } satisfies ExportedHandler<Env>;

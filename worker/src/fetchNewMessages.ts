@@ -1,11 +1,11 @@
-import { DatabaseGroup } from "../worker/src/types/databaseDtos";
-import { DatabaseRepository } from "./repository/DatabaseRepository";
+import { DatabaseInterface } from "./repository/DatabaseInterface";
 import { TelegramRepository } from "./repository/TelegramRepository";
+import { DatabaseGroup } from "./types/databaseDtos";
 import { parseDate } from "./utils/parseDate";
 
 export async function fetchNewMessages(
   telegramRepository: TelegramRepository,
-  databaseRepository: DatabaseRepository,
+  databaseRepository: DatabaseInterface,
   group: DatabaseGroup,
 ): Promise<number> {
   let maxId = group.last_message_id;

@@ -20,11 +20,11 @@ The project can run locally or remotely through a Cloudflare Worker
 
 ## Features
 
-:inbox_tray: **Fetch Messages:** downloads new messages or historical messages from the configured groups
+:inbox_tray: **Fetch messages:** downloads new messages or historical messages from the configured groups
 
-:mag: **Filter Messages:** searches messages using a configurable keyword syntax
+:mag: **Filter messages:** searches messages using a configurable keyword syntax
 
-:cloud: **Cloudflare Worker:** supports remotely updating the group list and running scheduled filtering tasks
+:cloud: **Cloudflare worker:** supports remotely updating the group list and running scheduled filtering tasks
 
 ## How to Run
 

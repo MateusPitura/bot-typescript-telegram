@@ -1,4 +1,4 @@
-import { TelegramClient } from "telegram";
+import { Api, TelegramClient } from "telegram";
 import { _MessagesIter } from "telegram/client/messages";
 import { StringSession } from "telegram/sessions";
 import { TelegramGroup } from "../types/telegramDtos";
@@ -75,11 +75,14 @@ export class TelegramRepository {
       throw new Error("Telegram connection is not initialized.");
     }
 
-    const group = await this.connection.getEntity(groupId);
+    const entity = await this.connection.getEntity(groupId);
 
-    if ("about" in group && typeof group.about === "string") {
-      return group.about;
-    }
-    return null;
+    const full = await this.connection.invoke(
+      new Api.messages.GetFullChat({
+        chatId: entity.id,
+      }),
+    );
+    const fullChat = full.fullChat as Api.ChatFull;
+    return fullChat.about ?? null;
   }
 }

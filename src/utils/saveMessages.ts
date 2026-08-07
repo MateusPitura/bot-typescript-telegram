@@ -2,10 +2,14 @@ import { format } from "date-fns";
 import { writeFileSync } from "node:fs";
 import { FilteredMessage } from "../../worker/src/types";
 import { cleanMessage } from "../../worker/src/utils/cleanMessage";
+import { extractLowestPrice } from "./extractLowestPrice";
+import { extractPrices } from "./extractPrices";
 
 interface FormattedMessage {
   date: string;
   text: string;
+  prices: string[];
+  lowestPrice: number;
 }
 
 export function saveMessages(
@@ -27,13 +31,24 @@ export function saveMessages(
 
     const formattedMessages: FormattedMessage[] = [];
     for (const message of sortedMessages) {
+      const prices = extractPrices(message.text);
+
       formattedMessages.push({
         date: format(new Date(message.timestamp), "dd/MM/yyyy HH:mm"),
         text: cleanMessage(message.text),
+        prices,
+        lowestPrice: extractLowestPrice(prices),
       });
     }
 
     const filename = `search/${today}/${keywordGroup}.json`;
-    writeFileSync(filename, JSON.stringify(formattedMessages, null, 2));
+    writeFileSync(
+      filename,
+      JSON.stringify(
+        formattedMessages.sort((a, b) => a.lowestPrice - b.lowestPrice),
+        null,
+        2,
+      ),
+    );
   }
 }

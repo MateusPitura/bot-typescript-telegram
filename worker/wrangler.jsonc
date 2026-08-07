@@ -15,6 +15,6 @@
     },
   ],
   "triggers": {
-    "crons": ["0 15 * * *"],
+    "crons": ["0 15 * * *"], // Every day at 15:00 UTC (12:00 in Brazil)
   },
 }

@@ -16,6 +16,7 @@ export async function updateGroupList(
     await databaseRepository.createGroup({
       user_name: groupUserName,
       title: group.title!,
+      last_message_id: group.message.id,
     });
   }
 }

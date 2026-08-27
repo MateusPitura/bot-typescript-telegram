@@ -3,4 +3,7 @@ export interface TelegramGroup {
   entity: {
     username: string;
   };
+  message: {
+    id: number;
+  };
 }

@@ -2,7 +2,7 @@ import { DatabaseGroup, DatabaseMessage } from "../types/databaseDtos";
 
 export interface DatabaseInterface {
   createGroup(
-    group: Pick<DatabaseGroup, "user_name" | "title">,
+    group: Pick<DatabaseGroup, "user_name" | "title" | 'last_message_id'>,
   ): Promise<void> | void;
   updateGroupLastMessageId(
     group: Pick<DatabaseGroup, "user_name" | "last_message_id">,

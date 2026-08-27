@@ -16,7 +16,7 @@ export class DatabaseRepository implements DatabaseInterface {
   }
 
   async createGroup(
-    group: Pick<DatabaseGroup, "user_name" | "title">,
+    group: Pick<DatabaseGroup, "user_name" | "title" | 'last_message_id'>,
   ): Promise<void> {
     if (!this.kv) {
       throw new Error("Database connection is not initialized.");
@@ -28,7 +28,7 @@ export class DatabaseRepository implements DatabaseInterface {
     const key = `group:${group.user_name}`;
     const value = JSON.stringify({
       ...group,
-      last_message_id: 0,
+      last_message_id: group.last_message_id || 0,
     });
     return this.kv.put(key, value);
   }

@@ -1,7 +1,7 @@
-import { Api, TelegramClient } from "telegram";
+import { TelegramClient } from "telegram";
 import { _MessagesIter } from "telegram/client/messages";
 import { StringSession } from "telegram/sessions";
-import { TelegramGroup } from "../types/telegramDtos";
+import { TelegramGroup, TelegramShortDescription } from "../types/telegramDtos";
 
 export class TelegramRepository {
   protected connection: TelegramClient | null = null;
@@ -58,31 +58,34 @@ export class TelegramRepository {
     await this.connection.disconnect();
   }
 
-  async sendMessage(receiverId: number, messages: string[]) {
-    if (!this.connection) {
-      throw new Error("Telegram connection is not initialized.");
-    }
-
+  async sendMessage(botToken: string, chatId: string, messages: string[]) {
     for (const message of messages) {
-      await this.connection.sendMessage(receiverId, {
-        message,
+      await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: message,
+        }),
       });
     }
   }
 
-  async getGroupDescription(groupId: number): Promise<string | null> {
-    if (!this.connection) {
-      throw new Error("Telegram connection is not initialized.");
-    }
-
-    const entity = await this.connection.getEntity(groupId);
-
-    const full = await this.connection.invoke(
-      new Api.messages.GetFullChat({
-        chatId: entity.id,
-      }),
+  async getGroupDescription(botToken: string): Promise<string | null> {
+    const response = await fetch(
+      `https://api.telegram.org/bot${botToken}/getMyShortDescription`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
     );
-    const fullChat = full.fullChat as Api.ChatFull;
-    return fullChat.about ?? null;
+
+    const data = (await response.json()) as TelegramShortDescription;
+
+    return data.result.short_description || null;
   }
 }

@@ -7,3 +7,9 @@ export interface TelegramGroup {
     id: number;
   };
 }
+
+export interface TelegramShortDescription {
+  result: {
+    short_description: string;
+  };
+}

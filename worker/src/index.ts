@@ -36,20 +36,19 @@ export default {
     const databaseRepository = new DatabaseRepository().init(env.KV);
     const telegramRepository = await new TelegramRepository().init(env);
     await fetchMessages(databaseRepository, telegramRepository);
-    const keyword = await telegramRepository.getGroupDescription(
-      Number(env.PRIVATE_GROUP_ID),
-    );
+    const keyword = await telegramRepository.getGroupDescription(env.BOT_TOKEN);
     console.log("keyword: ", keyword);
     if (!keyword) return;
     const filteredMessages = await filterMessages(databaseRepository, keyword);
     const formattedMessages = formatMessagesToSend(filteredMessages);
     if (formattedMessages.length) {
       await telegramRepository.sendMessage(
-        Number(env.PRIVATE_GROUP_ID),
+        env.BOT_TOKEN,
+        env.CHAT_ID,
         formattedMessages,
       );
     } else {
-      await telegramRepository.sendMessage(Number(env.PRIVATE_GROUP_ID), [
+      await telegramRepository.sendMessage(env.BOT_TOKEN, env.CHAT_ID, [
         'Nothing found for keyword: "' + keyword + '"',
       ]);
     }

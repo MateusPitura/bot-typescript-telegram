@@ -59,7 +59,7 @@ Download and filter messages: this is automatically done as configured in `wrang
 
 `TELEGRAM_STRING_SESSION`: the first time you run the project locally, leave this variable empty. The Telegram session string will be printed in the console. Save it so it can be reused on subsequent runs
 
-`PRIVATE_GROUP_ID`: the ID of the private Telegram group that will receive the filtered messages
+`BOT_TOKEN` and `CHAT_ID`: get these credentials from BotFather
 
 ## Technologies Used
 

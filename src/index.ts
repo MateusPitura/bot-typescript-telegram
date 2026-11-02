@@ -22,11 +22,12 @@ async function main() {
       telegramRepository.disconnect();
       break;
     case "filterMessages":
+      const sortByPrice = process.argv[3] === "--sortByPrice" || process.argv[3] === "-s";
       const filteredMessages = await filterMessages(
         databaseRepository,
         process.env.KEYWORD || "",
       );
-      saveMessages(filteredMessages);
+      saveMessages(filteredMessages, sortByPrice);
       break;
     case "fetchMessages":
       telegramRepository = await new TelegramRepository().init();

@@ -14,6 +14,7 @@ interface FormattedMessage {
 
 export function saveMessages(
   keywordGroupFilteredMessagesMap: Map<string, FilteredMessage[]>,
+  sortByPrice = false,
 ): void {
   const today = format(new Date(), "yyyy-MM-dd");
   const dir = `search/${today}`;
@@ -45,7 +46,9 @@ export function saveMessages(
     writeFileSync(
       filename,
       JSON.stringify(
-        formattedMessages.sort((a, b) => a.lowestPrice - b.lowestPrice),
+        sortByPrice
+          ? formattedMessages.sort((a, b) => a.lowestPrice - b.lowestPrice)
+          : formattedMessages,
         null,
         2,
       ),

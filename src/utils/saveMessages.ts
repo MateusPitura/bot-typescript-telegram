@@ -8,8 +8,8 @@ import { extractPrices } from "./extractPrices";
 interface FormattedMessage {
   date: string;
   text: string;
-  prices: string[];
-  lowestPrice: number;
+  prices?: string[];
+  lowestPrice?: number;
 }
 
 export function saveMessages(
@@ -34,12 +34,19 @@ export function saveMessages(
     for (const message of sortedMessages) {
       const prices = extractPrices(message.text);
 
-      formattedMessages.push({
-        date: format(new Date(message.timestamp), "dd/MM/yyyy HH:mm"),
-        text: cleanMessage(message.text),
-        prices,
-        lowestPrice: extractLowestPrice(prices),
-      });
+      if (sortByPrice) {
+        formattedMessages.push({
+          date: format(new Date(message.timestamp), "dd/MM/yyyy HH:mm"),
+          text: cleanMessage(message.text),
+          prices,
+          lowestPrice: extractLowestPrice(prices),
+        });
+      } else {
+        formattedMessages.push({
+          date: format(new Date(message.timestamp), "dd/MM/yyyy HH:mm"),
+          text: cleanMessage(message.text),
+        });
+      }
     }
 
     const filename = `search/${today}/${keywordGroup}.json`;
@@ -47,7 +54,10 @@ export function saveMessages(
       filename,
       JSON.stringify(
         sortByPrice
-          ? formattedMessages.sort((a, b) => a.lowestPrice - b.lowestPrice)
+          ? formattedMessages.sort((a, b) => {
+              if (!a.lowestPrice || !b.lowestPrice) return 0;
+              return a.lowestPrice - b.lowestPrice;
+            })
           : formattedMessages,
         null,
         2,

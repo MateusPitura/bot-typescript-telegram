@@ -22,7 +22,9 @@ async function main() {
       telegramRepository.disconnect();
       break;
     case "filterMessages":
-      const sortByPrice = process.argv[3] === "--sortByPrice" || process.argv[3] === "-s";
+      const args = process.argv.slice(2);
+      const sortByPrice = args.includes("--sortByPrice") || args.includes("-s");
+
       const filteredMessages = await filterMessages(
         databaseRepository,
         process.env.KEYWORD || "",

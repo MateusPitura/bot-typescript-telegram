@@ -5,7 +5,19 @@ import { updateGroupList } from "./updateGroupList";
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
-    const method = new URL(request.url).pathname.replace("/", "");
+    const url = new URL(request.url);
+    if (!env.API_KEY) {
+      return new Response("Server configuration error", {
+        status: 500,
+      });
+    }
+    if (url.searchParams.get("API_KEY") !== env.API_KEY) {
+      return new Response("Unauthorized", {
+        status: 401,
+      });
+    }
+
+    const method = url.pathname.replace("/", "");
     const databaseRepository = new DatabaseRepository().init(env.KV);
     let telegramRepository: TelegramRepository | undefined;
 

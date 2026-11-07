@@ -40,9 +40,9 @@ Filter messages: `npm run dev "filterMessages"`, the filter is based on the `KEY
 
 Deploy new version: `worker/npm run deploy`
 
-Update group list: open the following endpoint in a browser: [telegram-bot-promo.mateuspitura.workers.dev/updateGroupList](https://url.mateuspitura.com?q=telegram-bot-promo.mateuspitura.workers.dev/updateGroupList). It should return "OK"
+Set the `API_KEY` secret in the Cloudflare dashboard. Then update the group list by opening `https://telegram-bot-promo.mateuspitura.workers.dev/updateGroupList?API_KEY=<API_KEY>`. It should return "OK"
 
-Download and filter messages: this is automatically done as configured in `wrangler.jsonc` with the `triggers` property
+Download and filter messages: this is automatically done as configured in `wrangler.jsonc` with the `triggers` property. Can also be triggered manually by opening `https://telegram-bot-promo.mateuspitura.workers.dev/filterSendMessages?API_KEY=<API_KEY>`. It should return "OK"
 
 ### Filter Syntax
 
